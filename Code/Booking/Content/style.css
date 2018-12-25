@@ -8,3 +8,10 @@
     overflow: auto;
     margin: 10px;
 }
+.sidebar{
+    background-color: silver;
+    border:1px solid black;
+    margin-top:20px;
+    height:500px;
+    text-align: center;
+}
