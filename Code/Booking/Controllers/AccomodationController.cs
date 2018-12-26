@@ -5,10 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Models;
 using Booking.Controllers;
-using CSRedis;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using System.Web.Script.Serialization;
+
 
 namespace Booking.Controllers
 {
@@ -42,23 +39,19 @@ namespace Booking.Controllers
         [HttpPost]
         public ActionResult AddAccomodation(Accomodation accomodation)
         {
-            var jsonS = new JavaScriptSerializer();
-            var redis = new RedisClient("localhost",6379);
-            var aa = redis.Set("23", "aaaaaaa");
             var currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
             var user = _context.Users.Where(x => x.Email == currentUserName).FirstOrDefault();
+          
             accomodation.User = user;
             accomodation.AvailableRooms = 0;
             accomodation.CreationDate = DateTime.Now;
             accomodation.LastUpdate = DateTime.Now;
             accomodation.Rating = 0;
             _context.Accomodations.Add(accomodation);
-            redis.Set(accomodation.Id.ToString(), jsonS.Serialize(accomodation));
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpGet]
         [AllowAnonymous]
