@@ -10,10 +10,12 @@ namespace Booking.Controllers
     public class ReservationController : Controller
     {
         private ApplicationDbContext _context;
+        private RedisDBController redisDB;
 
         public ReservationController()
         {
             _context = new ApplicationDbContext();
+            redisDB = new RedisDBController();
         }
 
         protected override void Dispose(bool disposing)
@@ -47,6 +49,7 @@ namespace Booking.Controllers
             reservation.CreationDate = DateTime.Now;
             reservation.LastUpdate = DateTime.Now;
 
+            redisDB.AddReservation(reservation);
             _context.Reservations.Add(reservation);
             _context.SaveChanges();
 
